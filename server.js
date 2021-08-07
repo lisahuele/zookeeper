@@ -10,6 +10,8 @@ const app = express(); //institate the server (assign express.js to a variable t
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+//express.js middleware that instructs the server to make certain files readily avaialble and not gate it behind a server endpoint
+//express.static() make public folder static and available on-call.
 app.use(express.static('public'));
 
 function filterByQuery(query, animalsArray) {
@@ -112,8 +114,21 @@ app.post('/api/animals', (req, res) => {
     }
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/index.html'));
+// '/' points to the root route of the server
+app.get('/', (req, res) => { 
+  res.sendFile(path.join(__dirname, './public/index.html')); //using NPM's path module to find the correct location for the html code we want to display
+});
+
+app.get('/animals', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '.public/index.html'));
 });
 
 app.listen(PORT, () => {
